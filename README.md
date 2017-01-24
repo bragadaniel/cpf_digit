@@ -8,6 +8,6 @@ Run command
 
 ```sh
 
-$ ruby setup.rp
+$ ruby setup.rb
 ```
 Sample!
