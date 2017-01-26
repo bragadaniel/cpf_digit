@@ -15,8 +15,8 @@ class CPF
         count = 11
         sum = 0
         mult = 0
-        cpf.each_char do |c|
-            mult = c.to_i * (count -= 1)
+        cpf.each do |c|
+            mult = c * (count -= 1)
             sum += mult
         end
         digit_a = sum.remainder(11)
@@ -24,11 +24,11 @@ class CPF
         if digit_a == 0 || digit_a == 1
             digit_a = 0
             puts "Primeiro Digito: #{digit_a}"
-            cpf_i = cpf << digit_a.to_s
+            cpf_i = cpf << digit_a
         else
             digit_a = 11 - digit_a
             puts "Primeiro Digito: #{digit_a}"
-            cpf_i = cpf << digit_a.to_s
+            cpf_i = cpf << digit_a
         end
         calc_digit_J(cpf_i)
     end
@@ -38,8 +38,9 @@ class CPF
     def calc_digit_J(cpf_i)
         count = 12
         sum = 0
-        cpf_i.each_char do |c|
-            mult = c.to_i * (count -= 1)
+        str = ""
+        cpf_i.each do |c|
+            mult = c * (count -= 1)
             sum += mult
         end
         digit_b = sum.remainder(11)
@@ -47,13 +48,18 @@ class CPF
         if digit_b == 0 || digit_b == 1
             digit_b = 0
             puts "Segundo Digito: #{digit_b}"
-            cpf_ij = cpf << digit_b.to_s
-            puts "CPF: #{cpf_ij}"
+            cpf_ij = cpf << digit_b
+            cpf_ij.reverse_each { |cp| str += "#{cp} " }
+
+            puts "CPF: #{str}"
         else
             digit_b = 11 - digit_b
             puts "Segundo Digito: #{digit_b}"
-            cpf_ij = cpf_i << digit_b.to_s
-            puts "CPF: #{cpf_ij}"
+            cpf_ij = cpf_i << digit_b
+            cpf_ij.reverse_each { |cp| str += "#{cp} " }
+
+            puts "CPF: #{str}"
+
         end
     end
 end
