@@ -49,17 +49,16 @@ class CPF
             digit_b = 0
             puts "Segundo Digito: #{digit_b}"
             cpf_ij = cpf << digit_b
-            cpf_ij.reverse_each { |cp| str += "#{cp} " }
-
-            puts "CPF: #{str}"
+            cpf_ij.each { |cp| str += "#{cp}" }
+            puts "CPF: #{str[0..2]}.#{str[3..5]}.#{str[6..8]}-#{str[9..10]}"
+            #puts "CPF: #{str}"
         else
             digit_b = 11 - digit_b
             puts "Segundo Digito: #{digit_b}"
             cpf_ij = cpf_i << digit_b
-            cpf_ij.reverse_each { |cp| str += "#{cp} " }
-
-            puts "CPF: #{str}"
-
+            cpf_ij.each { |cp| str += "#{cp}" }
+            puts "CPF: #{str[0..2]}.#{str[3..5]}.#{str[6..8]}-#{str[9..10]}"
+            #puts "CPF: #{str}"
         end
     end
 end
