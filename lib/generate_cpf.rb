@@ -1,65 +1,50 @@
 module CpfFake
-
   class CPF
     attr_accessor :cpf
 
     def initialize(cpf)
-      @cpf = cpf
+      @cpf = cpf.map(&:to_i)
     end
 
     def build_digit
-      calc_digit_I
+      cpf_with_first_digit = calc_digit_I
+      calc_digit_J(cpf_with_first_digit)
     end
+
+    private
 
     # 10A + 9B + 8C + 7D + 6E + 5F + 4G + 3H + 2I
     # First Digit
     def calc_digit_I
-      count = 11
-      sum = 0
-      mult = 0
-      cpf.each do |c|
-        mult = c * (count -= 1)
-        sum += mult
+      sum = @cpf.each_with_index.reduce(0) do |acc, (num, idx)|
+        acc + num * (10 - idx)
       end
-      digit_a = sum.remainder(11)
-
-      if digit_a.zero? || digit_a == 1
-        digit_a = 0
-        puts "Primeiro Digito: #{digit_a}"
-        cpf_i = cpf << digit_a
-      else
-        digit_a = 11 - digit_a
-        puts "Primeiro Digito: #{digit_a}"
-        cpf_i = cpf << digit_a
-      end
-        calc_digit_J(cpf_i)
+      digit_a = sum % 11
+      digit_a = 0 if digit_a < 2
+      digit_a = 11 - digit_a if digit_a >= 2
+      puts "Primeiro Dígito: #{digit_a}"
+      @cpf + [digit_a]
     end
 
     # 11A + 10B + 9C + 8D + 7E + 6F + 5G + 4H + 3I + 2J
     # Second Digit
-    def calc_digit_J(cpf_i)
-      count = 12
-      sum = 0
-      str = ''
-      cpf_i.each do |c|
-        mult = c * (count -= 1)
-        sum += mult
+    def calc_digit_J(cpf_with_first_digit)
+      sum = cpf_with_first_digit.each_with_index.reduce(0) do |acc, (num, idx)|
+        acc + num * (11 - idx)
       end
-      digit_b = sum.remainder(11)
+      digit_b = sum % 11
+      digit_b = 0 if digit_b < 2
+      digit_b = 11 - digit_b if digit_b >= 2
+      puts "Segundo Dígito: #{digit_b}"
+      full_cpf = cpf_with_first_digit + [digit_b]
+      formatted_cpf = format_cpf(full_cpf)
+      puts "CPF: #{formatted_cpf}"
+      full_cpf
+    end
 
-      if digit_b.zero? || digit_b == 1
-        digit_b = 0
-        puts "Segundo Digito: #{digit_b}"
-        cpf_ij = cpf << digit_b
-        cpf_ij.each { |cp| str += cp.to_s }
-        puts "CPF: #{str[0..2]}.#{str[3..5]}.#{str[6..8]}-#{str[9..10]}"
-      else
-        digit_b = 11 - digit_b
-        puts "Segundo Digito: #{digit_b}"
-        cpf_ij = cpf_i << digit_b
-        cpf_ij.each { |cp| str += cp.to_s }
-        puts "CPF: #{str[0..2]}.#{str[3..5]}.#{str[6..8]}-#{str[9..10]}"
-      end
+    def format_cpf(cpf_array)
+      cpf_str = cpf_array.join
+      "#{cpf_str[0..2]}.#{cpf_str[3..5]}.#{cpf_str[6..8]}-#{cpf_str[9..10]}"
     end
   end
 end
